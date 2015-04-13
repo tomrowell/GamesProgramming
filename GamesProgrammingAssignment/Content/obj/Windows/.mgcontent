@@ -4,10 +4,10 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/computing/Desktop/GamesProgrammingAssignment/GamesProgrammingAssignment/Content/Floor.png</File>
-    <File>C:/Users/computing/Desktop/GamesProgrammingAssignment/GamesProgrammingAssignment/Content/Wall.png</File>
-    <File>C:/Users/computing/Desktop/GamesProgrammingAssignment/GamesProgrammingAssignment/Content/Door.png</File>
-    <File>C:/Users/computing/Desktop/GamesProgrammingAssignment/GamesProgrammingAssignment/Content/Stairs.png</File>
-    <File>C:/Users/computing/Desktop/GamesProgrammingAssignment/GamesProgrammingAssignment/Content/Player.png</File>
+    <File>C:/Users/computing/Documents/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Floor.png</File>
+    <File>C:/Users/computing/Documents/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Wall.png</File>
+    <File>C:/Users/computing/Documents/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Door.png</File>
+    <File>C:/Users/computing/Documents/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Stairs.png</File>
+    <File>C:/Users/computing/Documents/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Player.png</File>
   </SourceFiles>
 </SourceFileCollection>

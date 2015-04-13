@@ -175,7 +175,9 @@ namespace GamesProgrammingAssignment
 
             if (State.IsKeyDown(Keys.W))
             {
-                if (lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != 1)
+                if (lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != 1) //checks to see if there is a wall above the player
+                    yPlayer += -0.2f;
+                else if (yPlayer - Math.Truncate(yPlayer) > 0.2) //if there is a wall above the player, checks that they are not too close
                     yPlayer += -0.2f;
             }
 
@@ -183,18 +185,24 @@ namespace GamesProgrammingAssignment
             {
                 if (lvlMap[40 * yPlayerGrid + (xPlayerGrid - 1)] != 1)
                     xPlayer += -0.2f;
+                else if (xPlayer - Math.Truncate(xPlayer) > 0.2)
+                    xPlayer += -0.2f;
             }
 
             if (State.IsKeyDown(Keys.S))
             {
                 if (lvlMap[40 * (yPlayerGrid + 1) + xPlayerGrid] != 1)
                     yPlayer += 0.2f;
+                else if (yPlayer - Math.Truncate(yPlayer) < 0.8)
+                    yPlayer += 0.2f;
             }
 
             if (State.IsKeyDown(Keys.D))
             {
                 if (lvlMap[40 * yPlayerGrid + (xPlayerGrid + 1)] != 1)
-                xPlayer += 0.2f;
+                    xPlayer += 0.2f;
+                else if (xPlayer - Math.Truncate(xPlayer) < 0.8)
+                    xPlayer += 0.2f;
             }
 
             base.Update(gameTime);

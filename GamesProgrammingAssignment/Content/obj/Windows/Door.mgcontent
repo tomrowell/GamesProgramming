@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/computing/Desktop/GamesProgrammingAssignment/GamesProgrammingAssignment/Content/Door.png</SourceFile>
-  <SourceTime>2015-03-16T14:36:00+00:00</SourceTime>
-  <DestFile>C:/Users/computing/Desktop/GamesProgrammingAssignment/GamesProgrammingAssignment/Content/bin/Windows/Door.xnb</DestFile>
-  <DestTime>2015-03-23T12:28:21.1784647+00:00</DestTime>
+  <SourceFile>C:/Users/computing/Documents/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Door.png</SourceFile>
+  <SourceTime>2015-03-16T13:36:00+00:00</SourceTime>
+  <DestFile>C:/Users/computing/Documents/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/bin/Windows/Door.xnb</DestFile>
+  <DestTime>2015-04-13T12:20:47.8784244+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-02-15T18:25:40+00:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
