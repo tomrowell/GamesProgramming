@@ -175,9 +175,9 @@ namespace GamesProgrammingAssignment
 
             if (State.IsKeyDown(Keys.W))
             {
-                if (lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != 1) //checks to see if there is a wall above the player
+                if (lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != 1 && lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != 3 && lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != -1) //checks to see if there is a wall or door in the direction the player is moving
                     yPlayer += -0.2f;
-                else if (yPlayer - Math.Truncate(yPlayer) > 0.2) //if there is a wall above the player, checks that they are not too close
+                else if (yPlayer - Math.Truncate(yPlayer) > 0.2) //if there is a wall adjacent to the player, checks that they are not too close
                     yPlayer += -0.2f;
             }
 
