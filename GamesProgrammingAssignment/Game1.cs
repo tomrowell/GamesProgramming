@@ -23,6 +23,8 @@ namespace GamesProgrammingAssignment
         private int lvlRoomNumber;
         private bool newFloor = true;
 
+        private int count;
+
         private int xLeft;
         private int xRight;
         private int yTop;
@@ -42,12 +44,14 @@ namespace GamesProgrammingAssignment
         private Texture2D lvlStairs;
         private Texture2D lvlPlayer;
 
-        private int[] lvlMap = new int[40 * 24];
+        private int[] lvlMap = new int[80 * 48];
 
         public Game1()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 960;
             Content.RootDirectory = "Content";
         }
 
@@ -62,7 +66,7 @@ namespace GamesProgrammingAssignment
             lvlMapNumber = 1;
             lvlRoomNumber = 1;
 
-            for (int x = 0; x < 960; x++)
+            for (int x = 0; x < 80 * 48; x++)
             {
                 lvlMap[x] = 0;
             }
@@ -111,51 +115,66 @@ namespace GamesProgrammingAssignment
                 {
                     //setting the values level for the first floor (i.e. no prcedural generation)
                     case 1:
-                        xLeft = 10;
-                        xRight = 30;
-                        yTop = 3;
-                        yBot = 21;
-                        xDoor = 19;
-                        yDoor = 3;
-                        xStairs = 20;
-                        yStairs = 19;
-                        xPlayer = 20;
-                        yPlayer = 4;
+                        xLeft = 20;
+                        xRight = 60;
+                        yTop = 6;
+                        yBot = 42;
+                        xDoor = 39;
+                        yDoor = 6;
+                        xStairs = 40;
+                        yStairs = 38;
+                        xPlayer = 40;
+                        yPlayer = 8;
+                        break;
+                    default:
+                        if (lvlMapNumber < 6) //checks if the level number is less than 6
+                        {
+                            count = 0;
+                            //generates the same amount of rooms as the level number
+                            do
+                            {
+
+
+                                count += 1;
+                            }
+                            while (count != lvlMapNumber);
+                        }
+                        //else
                         break;
                 }
                 newFloor = false;
             }
 
             //assigning all values to the level array
-            for (int x = 0; x < 40; x++)
+            for (int x = 0; x < 80; x++)
             {
-                for (int y = 0; y < 24; y++)
+                for (int y = 0; y < 48; y++)
                 {
-                    if (lvlMap[40 * y + x] == 0)
+                    if (lvlMap[80 * y + x] == 0)
                     {
                         //assigning values for walls 
                         if ((x >= xLeft && x <= xRight && y == yTop)
                             || (x >= xLeft && x <= xRight && y == yBot)
                             || (y > yTop && y < yBot && x == xLeft)
                             || (y > yTop && y < yBot && x == xRight))
-                            lvlMap[40 * y + x] = 1;
+                            lvlMap[80 * y + x] = 1;
 
                         //assigning values for floors
                         if (x > xLeft && x < xRight && y > yTop && y < yBot)
-                            lvlMap[40 * y + x] = 2;
+                            lvlMap[80 * y + x] = 2;
 
                         //assigning values for door (if any)
                         if (x == xDoor && y == yDoor)
                         {
-                            lvlMap[40 * y + x] = 3;
-                            lvlMap[(40 * y + x) + 1] = -1;
-                            lvlMap[(40 * y + x) + 2] = -1;
+                            lvlMap[80 * y + x] = 3;
+                            lvlMap[(80 * y + x) + 1] = -1;
+                            lvlMap[(80 * y + x) + 2] = -1;
                         }
 
                         //assigning values for stairs
                         if (x == xStairs && y == yStairs)
                         {
-                            lvlMap[40 * y + x] = 4;
+                            lvlMap[80 * y + x] = 4;
                         }
                     }
                 }
@@ -175,7 +194,7 @@ namespace GamesProgrammingAssignment
 
             if (State.IsKeyDown(Keys.W))
             {
-                if (lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != 1 && lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != 3 && lvlMap[40 * (yPlayerGrid - 1) + xPlayerGrid] != -1) //checks to see if there is a wall or door in the direction the player is moving
+                if (lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 1 && lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 3 && lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != -1) //checks to see if there is a wall or door in the direction the player is moving
                     yPlayer += -0.2f;
                 else if (yPlayer - Math.Truncate(yPlayer) > 0.2) //if there is a wall adjacent to the player, checks that they are not too close
                     yPlayer += -0.2f;
@@ -183,7 +202,7 @@ namespace GamesProgrammingAssignment
 
             if (State.IsKeyDown(Keys.A))
             {
-                if (lvlMap[40 * yPlayerGrid + (xPlayerGrid - 1)] != 1)
+                if (lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] != 1)
                     xPlayer += -0.2f;
                 else if (xPlayer - Math.Truncate(xPlayer) > 0.2)
                     xPlayer += -0.2f;
@@ -191,7 +210,7 @@ namespace GamesProgrammingAssignment
 
             if (State.IsKeyDown(Keys.S))
             {
-                if (lvlMap[40 * (yPlayerGrid + 1) + xPlayerGrid] != 1)
+                if (lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] != 1)
                     yPlayer += 0.2f;
                 else if (yPlayer - Math.Truncate(yPlayer) < 0.8)
                     yPlayer += 0.2f;
@@ -199,10 +218,17 @@ namespace GamesProgrammingAssignment
 
             if (State.IsKeyDown(Keys.D))
             {
-                if (lvlMap[40 * yPlayerGrid + (xPlayerGrid + 1)] != 1)
+                if (lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] != 1)
                     xPlayer += 0.2f;
                 else if (xPlayer - Math.Truncate(xPlayer) < 0.8)
                     xPlayer += 0.2f;
+            }
+
+            //detects if player walks over the stairs
+            if (lvlMap[80 * yPlayerGrid + xPlayerGrid] == 4)
+            {
+                lvlMapNumber += 1;
+                newFloor = true;
             }
 
             base.Update(gameTime);
@@ -219,20 +245,20 @@ namespace GamesProgrammingAssignment
 
             spriteBatch.Begin();
 
-           for (int x = 0; x < 40; x++)
+           for (int x = 0; x < 80; x++)
                     {
-                        for (int y = 0; y < 24; y++)
+                        for (int y = 0; y < 48; y++)
                         {
-                            if (lvlMap[40*y+x] == 1)
+                            if (lvlMap[80*y+x] == 1)
                                 spriteBatch.Draw(lvlWall, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
 
-                            if (lvlMap[40*y+x] == 2)
+                            if (lvlMap[80*y+x] == 2)
                                 spriteBatch.Draw(lvlFloor, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
 
-                            if (lvlMap[40 * y + x] == 3)
+                            if (lvlMap[80 * y + x] == 3)
                                 spriteBatch.Draw(lvlDoor, new Rectangle(x * 20, y * 20, 60, 20), Color.White);
 
-                            if (lvlMap[40 * y + x] == 4)
+                            if (lvlMap[80 * y + x] == 4)
                                 spriteBatch.Draw(lvlStairs, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
 
                             //if (x == xPlayer && y == yPlayer)
