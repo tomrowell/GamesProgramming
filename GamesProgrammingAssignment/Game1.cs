@@ -127,12 +127,13 @@ namespace GamesProgrammingAssignment
                         yPlayer = 8;
 
                         lvlMapAssign();
-                        break;
-                    default:
+                        
                         xDoor = -1;
                         yDoor = -1;
                         xStairs = -1;
                         yStairs = -1;
+                        break;
+                    default:
                         for (int x = 0; x < 80 * 48; x++)
                         {
                             lvlMap[x] = 0;
@@ -155,6 +156,21 @@ namespace GamesProgrammingAssignment
                                 count += 1;
                             }
                             while (count != lvlMapNumber);
+
+                            xLeft = -1;
+                            xRight = -1;
+                            yTop = -1;
+                            yBot = -1;
+
+                            //randomly selects a floorspace in a room to replace with stairs
+                            do
+                            {
+                                xStairs = rand.Next(0, 80);
+                                yStairs = rand.Next(0, 48);
+                            }
+                            while (lvlMap[80 * yStairs + xStairs] != 2);
+                            lvlMapAssign();
+
                         }
                         //else
                         break;
