@@ -71,7 +71,7 @@ namespace GamesProgrammingAssignment
                 lvlMap[x] = 0;
             }
 
-                base.Initialize();
+            base.Initialize();
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace GamesProgrammingAssignment
                 Exit();
 
             if (newFloor)
-            { 
+            {
                 switch (lvlMapNumber)
                 {
                     //setting the values level for the first floor (i.e. no prcedural generation)
@@ -125,16 +125,33 @@ namespace GamesProgrammingAssignment
                         yStairs = 38;
                         xPlayer = 40;
                         yPlayer = 8;
+
+                        lvlMapAssign();
                         break;
                     default:
+                        xDoor = -1;
+                        yDoor = -1;
+                        xStairs = -1;
+                        yStairs = -1;
+                        for (int x = 0; x < 80 * 48; x++)
+                        {
+                            lvlMap[x] = 0;
+                        }
                         if (lvlMapNumber < 6) //checks if the level number is less than 6
                         {
                             count = 0;
+                            Random rand = new Random();
                             //generates the same amount of rooms as the level number
                             do
                             {
+                                //randomly generate a small room
+                                xLeft = rand.Next(3,54);
+                                xRight = xLeft + rand.Next(5,17);
+                                yTop = rand.Next(3,22);
+                                yBot = yTop + rand.Next(5,17);
 
-
+                                //if the room does not overlap with another room, draws the room and count increases by one
+                                lvlMapAssign();
                                 count += 1;
                             }
                             while (count != lvlMapNumber);
@@ -143,41 +160,6 @@ namespace GamesProgrammingAssignment
                         break;
                 }
                 newFloor = false;
-            }
-
-            //assigning all values to the level array
-            for (int x = 0; x < 80; x++)
-            {
-                for (int y = 0; y < 48; y++)
-                {
-                    if (lvlMap[80 * y + x] == 0)
-                    {
-                        //assigning values for walls 
-                        if ((x >= xLeft && x <= xRight && y == yTop)
-                            || (x >= xLeft && x <= xRight && y == yBot)
-                            || (y > yTop && y < yBot && x == xLeft)
-                            || (y > yTop && y < yBot && x == xRight))
-                            lvlMap[80 * y + x] = 1;
-
-                        //assigning values for floors
-                        if (x > xLeft && x < xRight && y > yTop && y < yBot)
-                            lvlMap[80 * y + x] = 2;
-
-                        //assigning values for door (if any)
-                        if (x == xDoor && y == yDoor)
-                        {
-                            lvlMap[80 * y + x] = 3;
-                            lvlMap[(80 * y + x) + 1] = -1;
-                            lvlMap[(80 * y + x) + 2] = -1;
-                        }
-
-                        //assigning values for stairs
-                        if (x == xStairs && y == yStairs)
-                        {
-                            lvlMap[80 * y + x] = 4;
-                        }
-                    }
-                }
             }
 
             if (xPlayer % 1 > 0.5)
@@ -227,6 +209,7 @@ namespace GamesProgrammingAssignment
             //detects if player walks over the stairs
             if (lvlMap[80 * yPlayerGrid + xPlayerGrid] == 4)
             {
+                lvlMap[80 * yPlayerGrid + xPlayerGrid] = 2;
                 lvlMapNumber += 1;
                 newFloor = true;
             }
@@ -245,32 +228,68 @@ namespace GamesProgrammingAssignment
 
             spriteBatch.Begin();
 
-           for (int x = 0; x < 80; x++)
-                    {
-                        for (int y = 0; y < 48; y++)
-                        {
-                            if (lvlMap[80*y+x] == 1)
-                                spriteBatch.Draw(lvlWall, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
+            for (int x = 0; x < 80; x++)
+            {
+                for (int y = 0; y < 48; y++)
+                {
+                    if (lvlMap[80 * y + x] == 1)
+                        spriteBatch.Draw(lvlWall, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
 
-                            if (lvlMap[80*y+x] == 2)
-                                spriteBatch.Draw(lvlFloor, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
+                    if (lvlMap[80 * y + x] == 2)
+                        spriteBatch.Draw(lvlFloor, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
 
-                            if (lvlMap[80 * y + x] == 3)
-                                spriteBatch.Draw(lvlDoor, new Rectangle(x * 20, y * 20, 60, 20), Color.White);
+                    if (lvlMap[80 * y + x] == 3)
+                        spriteBatch.Draw(lvlDoor, new Rectangle(x * 20, y * 20, 60, 20), Color.White);
 
-                            if (lvlMap[80 * y + x] == 4)
-                                spriteBatch.Draw(lvlStairs, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
+                    if (lvlMap[80 * y + x] == 4)
+                        spriteBatch.Draw(lvlStairs, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
+                }
+            }
 
-                            //if (x == xPlayer && y == yPlayer)
-                            //    spriteBatch.Draw(lvlPlayer, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
-                        }    
-                    }
-
-           spriteBatch.Draw(lvlPlayer, new Rectangle((int)(xPlayer * 20), (int)(yPlayer * 20), 20, 20), Color.White);
+            spriteBatch.Draw(lvlPlayer, new Rectangle((int)(xPlayer * 20), (int)(yPlayer * 20), 20, 20), Color.White);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+
+        private void lvlMapAssign()
+        {
+            //assigning all values to the level array
+            for (int x = 0; x < 80; x++)
+            {
+                for (int y = 0; y < 48; y++)
+                {
+                    if (lvlMap[80 * y + x] == 0)
+                    {
+                        //assigning values for walls 
+                        if ((x >= xLeft && x <= xRight && y == yTop)
+                            || (x >= xLeft && x <= xRight && y == yBot)
+                            || (y > yTop && y < yBot && x == xLeft)
+                            || (y > yTop && y < yBot && x == xRight))
+                            lvlMap[80 * y + x] = 1;
+
+                        //assigning values for floors
+                        if (x > xLeft && x < xRight && y > yTop && y < yBot)
+                            lvlMap[80 * y + x] = 2;
+
+                        //assigning values for door (if any)
+                        if (x == xDoor && y == yDoor && lvlMapNumber == 1)
+                        {
+                            lvlMap[80 * y + x] = 3;
+                            lvlMap[(80 * y + x) + 1] = -1;
+                            lvlMap[(80 * y + x) + 2] = -1;
+                        }
+
+                        //assigning values for stairs
+                        if (x == xStairs && y == yStairs)
+                        {
+                            lvlMap[80 * y + x] = 4;
+                        }
+                    }
+                }
+            }
         }
     }
 }
