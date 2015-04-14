@@ -142,7 +142,7 @@ namespace GamesProgrammingAssignment
                         {
                             lvlMap[x] = 0;
                         }
-                        if (lvlMapNumber < 8) //checks if the level number is less than 8
+                        if (lvlMapNumber < 8000) //checks if the level number is less than 8
                         {
                             count = 0;
                             Random rand = new Random();
@@ -188,10 +188,15 @@ namespace GamesProgrammingAssignment
                             {
                                 xPlayerGrid = rand7.Next(0, 80);
                                 yPlayerGrid = rand8.Next(0, 48);
-                                xPlayer = xPlayerGrid;
-                                yPlayer = yPlayerGrid;
                             }
-                            while (lvlMap[80 * yPlayerGrid + xPlayerGrid] != 2 || xPlayerGrid == xStairs && yPlayerGrid == yStairs);
+                            while (lvlMap[80 * yPlayerGrid + xPlayerGrid] != 2
+                                || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] != 2
+                                || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] != 2
+                                || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] != 2
+                                || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 2 
+                                || xPlayerGrid == xStairs && yPlayerGrid == yStairs);
+                            xPlayer = xPlayerGrid;
+                            yPlayer = yPlayerGrid;
 
                             //creates a path from the player to the stairs
                             completedCorridor = false;
@@ -248,7 +253,7 @@ namespace GamesProgrammingAssignment
                                 }
 
                                 //draws a corridor of the chosen length from the current point
-                                if (lengthCorridor > 1)
+                                if (lengthCorridor > 0)
                                     lvlMapCorridorAssign();
                             }
                             while (completedCorridor == false);
