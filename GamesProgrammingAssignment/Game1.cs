@@ -293,12 +293,12 @@ namespace GamesProgrammingAssignment
             {
                 for (int y = 0; y < 48; y++)
                 {
-                    //assigning values for walls 
-                    if ((x >= xLeft && x <= xRight && y == yTop)
-                        || (x >= xLeft && x <= xRight && y == yBot)
-                        || (y > yTop && y < yBot && x == xLeft)
-                        || (y > yTop && y < yBot && x == xRight)
-                        && (lvlMap[80 * y + x] != 2))
+                    //assigning values for walls using xLeft, xRight, yTop and yBottom as boundaries
+                    //also will not place a wall if a floor tile is already there
+                    if ((x >= xLeft && x <= xRight && y == yTop) && (lvlMap[80 * y + x] != 2)
+                        || (x >= xLeft && x <= xRight && y == yBot) && (lvlMap[80 * y + x] != 2)
+                        || (y > yTop && y < yBot && x == xLeft) && (lvlMap[80 * y + x] != 2)
+                        || (y > yTop && y < yBot && x == xRight) && (lvlMap[80 * y + x] != 2))
                         lvlMap[80 * y + x] = 1;
 
                     //assigning values for floors
