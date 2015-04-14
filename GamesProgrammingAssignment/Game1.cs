@@ -122,7 +122,7 @@ namespace GamesProgrammingAssignment
                         xDoor = 39;
                         yDoor = 6;
                         xStairs = 40;
-                        yStairs = 38;
+                        yStairs = 24;
                         xPlayer = 40;
                         yPlayer = 8;
 
@@ -130,28 +130,32 @@ namespace GamesProgrammingAssignment
                         
                         xDoor = -1;
                         yDoor = -1;
-                        xStairs = -1;
-                        yStairs = -1;
                         break;
                     default:
                         for (int x = 0; x < 80 * 48; x++)
                         {
                             lvlMap[x] = 0;
                         }
-                        if (lvlMapNumber < 6) //checks if the level number is less than 6
+                        if (lvlMapNumber < 8) //checks if the level number is less than 8
                         {
                             count = 0;
                             Random rand = new Random();
+                            Random rand2 = new Random(rand.Next(0,100));
+                            Random rand3 = new Random(rand2.Next(0, 100));
+                            Random rand4 = new Random(rand3.Next(0, 100));
+                            Random rand5 = new Random(rand4.Next(0, 100));
+                            Random rand6 = new Random(rand5.Next(0, 100));
+                            Random rand7 = new Random(rand6.Next(0, 100));
+                            Random rand8 = new Random(rand7.Next(0, 100));
                             //generates the same amount of rooms as the level number
                             do
                             {
                                 //randomly generate a small room
-                                xLeft = rand.Next(3,54);
-                                xRight = xLeft + rand.Next(5,17);
-                                yTop = rand.Next(3,22);
-                                yBot = yTop + rand.Next(5,17);
+                                xLeft = rand.Next(3,57);
+                                xRight = xLeft + rand2.Next(5,22);
+                                yTop = rand3.Next(3,25);
+                                yBot = yTop + rand4.Next(5,22);
 
-                                //if the room does not overlap with another room, draws the room and count increases by one
                                 lvlMapAssign();
                                 count += 1;
                             }
@@ -165,16 +169,28 @@ namespace GamesProgrammingAssignment
                             //randomly selects a floorspace in a room to replace with stairs
                             do
                             {
-                                xStairs = rand.Next(0, 80);
-                                yStairs = rand.Next(0, 48);
+                                xStairs = rand5.Next(0, 80);
+                                yStairs = rand6.Next(0, 48);
                             }
-                            while (lvlMap[80 * yStairs + xStairs] != 2);
+                            while (lvlMap[80 * yStairs + xStairs] != 2) ;
                             lvlMapAssign();
+
+                            //randomly places the player on an available floorspace
+                            do
+                            {
+                                xPlayerGrid = rand7.Next(0, 80);
+                                yPlayerGrid = rand8.Next(0, 48);
+                                xPlayer = xPlayerGrid;
+                                yPlayer = yPlayerGrid;
+                            }
+                            while (lvlMap[80 * yPlayerGrid + xPlayerGrid] != 2);
 
                         }
                         //else
                         break;
                 }
+                xStairs = -1;
+                yStairs = -1;
                 newFloor = false;
             }
 
@@ -222,7 +238,7 @@ namespace GamesProgrammingAssignment
                     xPlayer += 0.2f;
             }
 
-            //detects if player walks over the stairs
+            //detects if player walks over the stairs and moves onto the next level
             if (lvlMap[80 * yPlayerGrid + xPlayerGrid] == 4)
             {
                 lvlMap[80 * yPlayerGrid + xPlayerGrid] = 2;
@@ -277,32 +293,30 @@ namespace GamesProgrammingAssignment
             {
                 for (int y = 0; y < 48; y++)
                 {
-                    if (lvlMap[80 * y + x] == 0)
+                    //assigning values for walls 
+                    if ((x >= xLeft && x <= xRight && y == yTop)
+                        || (x >= xLeft && x <= xRight && y == yBot)
+                        || (y > yTop && y < yBot && x == xLeft)
+                        || (y > yTop && y < yBot && x == xRight)
+                        && (lvlMap[80 * y + x] != 2))
+                        lvlMap[80 * y + x] = 1;
+
+                    //assigning values for floors
+                    if (x > xLeft && x < xRight && y > yTop && y < yBot)
+                        lvlMap[80 * y + x] = 2;
+
+                    //assigning values for door (if any)
+                    if (x == xDoor && y == yDoor && lvlMapNumber == 1)
                     {
-                        //assigning values for walls 
-                        if ((x >= xLeft && x <= xRight && y == yTop)
-                            || (x >= xLeft && x <= xRight && y == yBot)
-                            || (y > yTop && y < yBot && x == xLeft)
-                            || (y > yTop && y < yBot && x == xRight))
-                            lvlMap[80 * y + x] = 1;
+                        lvlMap[80 * y + x] = 3;
+                        lvlMap[(80 * y + x) + 1] = -1;
+                        lvlMap[(80 * y + x) + 2] = -1;
+                    }
 
-                        //assigning values for floors
-                        if (x > xLeft && x < xRight && y > yTop && y < yBot)
-                            lvlMap[80 * y + x] = 2;
-
-                        //assigning values for door (if any)
-                        if (x == xDoor && y == yDoor && lvlMapNumber == 1)
-                        {
-                            lvlMap[80 * y + x] = 3;
-                            lvlMap[(80 * y + x) + 1] = -1;
-                            lvlMap[(80 * y + x) + 2] = -1;
-                        }
-
-                        //assigning values for stairs
-                        if (x == xStairs && y == yStairs)
-                        {
-                            lvlMap[80 * y + x] = 4;
-                        }
+                    //assigning values for stairs
+                    if (x == xStairs && y == yStairs)
+                    {
+                        lvlMap[80 * y + x] = 4;
                     }
                 }
             }
