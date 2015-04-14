@@ -142,124 +142,120 @@ namespace GamesProgrammingAssignment
                         {
                             lvlMap[x] = 0;
                         }
-                        if (lvlMapNumber < 8000) //checks if the level number is less than 8
+                        count = 0;
+                        Random rand = new Random();
+                        Random rand2 = new Random(rand.Next(0,100));
+                        Random rand3 = new Random(rand2.Next(0, 100));
+                        Random rand4 = new Random(rand3.Next(0, 100));
+                        Random rand5 = new Random(rand4.Next(0, 100));
+                        Random rand6 = new Random(rand5.Next(0, 100));
+                        Random rand7 = new Random(rand6.Next(0, 100));
+                        Random rand8 = new Random(rand7.Next(0, 100));
+                        Random rand9 = new Random(rand8.Next(0, 100));
+                        Random rand10 = new Random(rand9.Next(0, 100));
+                        //generates the same amount of rooms as the level number
+                        do
                         {
-                            count = 0;
-                            Random rand = new Random();
-                            Random rand2 = new Random(rand.Next(0,100));
-                            Random rand3 = new Random(rand2.Next(0, 100));
-                            Random rand4 = new Random(rand3.Next(0, 100));
-                            Random rand5 = new Random(rand4.Next(0, 100));
-                            Random rand6 = new Random(rand5.Next(0, 100));
-                            Random rand7 = new Random(rand6.Next(0, 100));
-                            Random rand8 = new Random(rand7.Next(0, 100));
-                            Random rand9 = new Random(rand8.Next(0, 100));
-                            Random rand10 = new Random(rand9.Next(0, 100));
-                            //generates the same amount of rooms as the level number
-                            do
-                            {
-                                //randomly generate a small room
-                                xLeft = rand.Next(3,57);
-                                xRight = xLeft + rand2.Next(5,22);
-                                yTop = rand3.Next(3,25);
-                                yBot = yTop + rand4.Next(5,22);
+                            //randomly generate a small room
+                            xLeft = rand.Next(3,57);
+                            xRight = xLeft + rand2.Next(5,22);
+                            yTop = rand3.Next(3,25);
+                            yBot = yTop + rand4.Next(5,22);
 
-                                lvlMapRoomAssign();
-                                count += 1;
-                            }
-                            while (count != lvlMapNumber);
-
-                            xLeft = -1;
-                            xRight = -1;
-                            yTop = -1;
-                            yBot = -1;
-
-                            //randomly selects a floorspace in a room to replace with stairs
-                            do
-                            {
-                                xStairs = rand5.Next(0, 80);
-                                yStairs = rand6.Next(0, 48);
-                            }
-                            while (lvlMap[80 * yStairs + xStairs] != 2) ;
                             lvlMapRoomAssign();
+                            count += 1;
+                        }
+                        while (count < lvlMapNumber && count < 15);
 
-                            //randomly places the player on an available floorspace
-                            do
-                            {
-                                xPlayerGrid = rand7.Next(0, 80);
-                                yPlayerGrid = rand8.Next(0, 48);
-                            }
-                            while (lvlMap[80 * yPlayerGrid + xPlayerGrid] != 2
-                                || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] != 2
-                                || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] != 2
-                                || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] != 2
-                                || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 2 
-                                || xPlayerGrid == xStairs && yPlayerGrid == yStairs);
-                            xPlayer = xPlayerGrid;
-                            yPlayer = yPlayerGrid;
+                        xLeft = -1;
+                        xRight = -1;
+                        yTop = -1;
+                        yBot = -1;
 
-                            //creates a path from the player to the stairs
-                            completedCorridor = false;
-                            //reads in the player's position as the current point
-                            xCorridor = xPlayerGrid;
-                            yCorridor = yPlayerGrid;
-                            //picks either the x or y axis
-                            xySelect = rand9.Next(1, 2);
-                            do
+                        //randomly selects a floorspace in a room to replace with stairs
+                        do
+                        {
+                            xStairs = rand5.Next(0, 80);
+                            yStairs = rand6.Next(0, 48);
+                        }
+                        while (lvlMap[80 * yStairs + xStairs] != 2) ;
+                        lvlMapRoomAssign();
+
+                        //randomly places the player on an available floorspace
+                        do
+                        {
+                            xPlayerGrid = rand7.Next(0, 80);
+                            yPlayerGrid = rand8.Next(0, 48);
+                        }
+                        while (lvlMap[80 * yPlayerGrid + xPlayerGrid] != 2
+                            || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] != 2
+                            || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] != 2
+                            || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] != 2
+                            || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 2 
+                            || xPlayerGrid == xStairs && yPlayerGrid == yStairs);
+                        xPlayer = xPlayerGrid;
+                        yPlayer = yPlayerGrid;
+
+                        //creates a path from the player to the stairs
+                        completedCorridor = false;
+                        //reads in the player's position as the current point
+                        xCorridor = xPlayerGrid;
+                        yCorridor = yPlayerGrid;
+                        //picks either the x or y axis
+                        xySelect = rand9.Next(1, 2);
+                        do
+                        {
+                            if (xySelect == 1)
                             {
-                                if (xySelect == 1)
+                                //randomly chooses a distance between 1 and the total distance between the current point and the stairs in the x axis
+                                //then moves the current point to the end of the corridor
+                                if (xCorridor > xStairs)
                                 {
-                                    //randomly chooses a distance between 1 and the total distance between the current point and the stairs in the x axis
-                                    //then moves the current point to the end of the corridor
-                                    if (xCorridor > xStairs)
-                                    {
-                                        //lengthCorridor = rand10.Next(0, xCorridor - xStairs);
-                                        lengthCorridor = xCorridor - xStairs;
-                                        xCorridor -= lengthCorridor;
-                                    }
-                                    else if (xCorridor < xStairs)
-                                    {
-                                        //lengthCorridor = rand10.Next(0, xStairs - xCorridor);
-                                        lengthCorridor = xStairs - xCorridor;
-                                        xCorridor += lengthCorridor;
-                                    }
-                                    else
-                                        lengthCorridor = 0;
-
-                                    //switches the selected axis
-                                    xySelect = 2;
+                                    //lengthCorridor = rand10.Next(1, xCorridor - xStairs);
+                                    lengthCorridor = xCorridor - xStairs;
+                                    xCorridor -= lengthCorridor;
+                                }
+                                else if (xCorridor < xStairs)
+                                {
+                                    //lengthCorridor = rand10.Next(1, xStairs - xCorridor);
+                                    lengthCorridor = xStairs - xCorridor;
+                                    xCorridor += lengthCorridor;
                                 }
                                 else
-                                {
-                                    //randomly chooses a distance between 1 and the total distance between the current point and the stairs in the y axis
-                                    //then moves the current point to the end of the corridor
-                                    if (yCorridor > yStairs)
-                                    {
-                                        //lengthCorridor = rand10.Next(0, yCorridor - yStairs);
-                                        lengthCorridor = yCorridor - yStairs;
-                                        yCorridor -= lengthCorridor;
-                                    }
-                                    else if (yCorridor < yStairs)
-                                    {
-                                        //lengthCorridor = rand10.Next(0, yStairs - yCorridor);
-                                        lengthCorridor = yStairs - yCorridor;
-                                        yCorridor += lengthCorridor;
-                                    }
-                                    else
-                                        lengthCorridor = 0;
+                                    lengthCorridor = 0;
 
-                                    //switches the selected axis
-                                    xySelect = 1;
-                                }
-
-                                //draws a corridor of the chosen length from the current point
-                                if (lengthCorridor > 0)
-                                    lvlMapCorridorAssign();
+                                //switches the selected axis
+                                xySelect = 2;
                             }
-                            while (completedCorridor == false);
-                            //repeats until the stairs are reached
+                            else
+                            {
+                                //randomly chooses a distance between 1 and the total distance between the current point and the stairs in the y axis
+                                //then moves the current point to the end of the corridor
+                                if (yCorridor > yStairs)
+                                {
+                                    //lengthCorridor = rand10.Next(1, yCorridor - yStairs);
+                                    lengthCorridor = yCorridor - yStairs;
+                                    yCorridor -= lengthCorridor;
+                                }
+                                else if (yCorridor < yStairs)
+                                {
+                                    //lengthCorridor = rand10.Next(1, yStairs - yCorridor);
+                                    lengthCorridor = yStairs - yCorridor;
+                                    yCorridor += lengthCorridor;
+                                }
+                                else
+                                    lengthCorridor = 0;
+
+                                //switches the selected axis
+                                xySelect = 1;
+                            }
+
+                            //draws a corridor of the chosen length from the current point
+                            if (lengthCorridor > 0)
+                                lvlMapCorridorAssign();
                         }
-                        //else
+                        while (completedCorridor == false);
+                        //repeats until the stairs are reached
                         break;
                 }
                 xStairs = -1;
@@ -406,6 +402,7 @@ namespace GamesProgrammingAssignment
                     {
 
                         case 1:
+                            //checks if selected tile is on the corridor
                             if ((yPlayerGrid > yStairs && y <= yCorridor + lengthCorridor && y >= yStairs && x == xCorridor)
                                 || (yPlayerGrid < yStairs && y >= yCorridor - lengthCorridor && y <= yStairs && x == xCorridor))
                             {
@@ -414,12 +411,19 @@ namespace GamesProgrammingAssignment
                                 {
                                     completedCorridor = true;
                                 }
+                                //draws the path tile if it is not the stairs
                                 if (lvlMap[80 * y + x] != 4)
                                     lvlMap[80 * y + x] = 2;
+                                //draws walls next to the path if there is nothing there already
+                                if (lvlMap[80 * y + (x + 1)] == 0)
+                                    lvlMap[80 * y + (x + 1)] = 1;
+                                if (lvlMap[80 * y + (x - 1)] == 0)
+                                    lvlMap[80 * y + (x - 1)] = 1;
                             }
                             break;
 
                         default:
+                            //draws the path from along the x axis
                             if ((xPlayerGrid > xStairs && x <= xCorridor + lengthCorridor && x >= xStairs && y == yCorridor)
                                 || (xPlayerGrid < xStairs && x >= xCorridor - lengthCorridor && x <= xStairs && y == yCorridor))
                             {
@@ -428,11 +432,26 @@ namespace GamesProgrammingAssignment
                                 {
                                     completedCorridor = true;
                                 }
+                                //draws the path tile if it is not the stairs
                                 if (lvlMap[80 * y + x] != 4)
                                     lvlMap[80 * y + x] = 2;
+                                //draws walls next to the path if there is nothing there already
+                                if (lvlMap[80 * (y + 1) + x] == 0)
+                                    lvlMap[80 * (y + 1) + x] = 1;
+                                if (lvlMap[80 * (y - 1) + x] == 0)
+                                    lvlMap[80 * (y - 1) + x] = 1;
                             }
                             break;
                     }
+                }
+            }
+            //fills in any corners of corridors
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    if (lvlMap[80 * (yCorridor + y) + (xCorridor + x)] == 0)
+                        lvlMap[80 * (yCorridor + y) + (xCorridor + x)] = 1;
                 }
             }
         }
