@@ -32,12 +32,12 @@ namespace GamesProgrammingAssignment
         private int yDoor;
         private int xStairs;
         private int yStairs;
-        private float xPlayer;
-        private float yPlayer;
-        private float xPlayerCentre;
-        private float yPlayerCentre;
-        private int xPlayerGrid;
-        private int yPlayerGrid;
+        //private float xPlayer;
+        //private float yPlayer;
+        //private float xPlayerCentre;
+        //private float yPlayerCentre;
+        //private int xPlayerGrid;
+        //private int yPlayerGrid;
 
         private int xCorridor;
         private int yCorridor;
@@ -51,7 +51,11 @@ namespace GamesProgrammingAssignment
         private Texture2D lvlStairs;
         private Texture2D lvlPlayer;
 
+        //creates an array to store the map grid
         private int[] lvlMap = new int[80 * 48];
+
+        //creates an instance of the Player class
+        Player Player1 = new Player(40, 8, 20);
 
         public Game1()
             : base()
@@ -129,9 +133,8 @@ namespace GamesProgrammingAssignment
                         yDoor = 6;
                         xStairs = 40;
                         yStairs = 24;
-                        xPlayer = 40;
-                        yPlayer = 8;
 
+                        //assigns the values given above to the map grid
                         lvlMapRoomAssign();
                         
                         xDoor = -1;
@@ -153,6 +156,7 @@ namespace GamesProgrammingAssignment
                         Random rand8 = new Random(rand7.Next(0, 100));
                         Random rand9 = new Random(rand8.Next(0, 100));
                         Random rand10 = new Random(rand9.Next(0, 100));
+
                         //generates the same amount of rooms as the level number
                         do
                         {
@@ -184,23 +188,23 @@ namespace GamesProgrammingAssignment
                         //randomly places the player on an available floorspace
                         do
                         {
-                            xPlayerGrid = rand7.Next(0, 80);
-                            yPlayerGrid = rand8.Next(0, 48);
+                            Player1.xGridSet(rand7.Next(0, 80));
+                            Player1.yGridSet(rand8.Next(0, 48));
                         }
-                        while (lvlMap[80 * yPlayerGrid + xPlayerGrid] != 2
-                            || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] != 2
-                            || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] != 2
-                            || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] != 2
-                            || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 2 
-                            || xPlayerGrid == xStairs && yPlayerGrid == yStairs);
-                        xPlayer = xPlayerGrid;
-                        yPlayer = yPlayerGrid;
+                        while (lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] != 2
+                            || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] != 2
+                            || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] != 2
+                            || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] != 2
+                            || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] != 2 
+                            || Player1.xGridGet() == xStairs && Player1.yGridGet() == yStairs);
+                        Player1.xPosSet(Player1.xGridGet());
+                        Player1.yPosSet(Player1.yGridGet());
 
                         //creates a path from the player to the stairs
                         completedCorridor = false;
                         //reads in the player's position as the current point
-                        xCorridor = xPlayerGrid;
-                        yCorridor = yPlayerGrid;
+                        xCorridor = Player1.xGridGet();
+                        yCorridor = Player1.yGridGet();
                         //picks either the x or y axis
                         xySelect = rand9.Next(1, 2);
                         do
@@ -263,54 +267,48 @@ namespace GamesProgrammingAssignment
                 newFloor = false;
             }
 
-            //calculates the player's x coordinate as if they were on the map grid
-            //offsets the central point of the player on the x axis
-            xPlayerCentre = xPlayer + 0.5f;
-                xPlayerGrid = (int)xPlayerCentre;
+            //updates the x and y coordinates for the player
+            Player1.xyUpdate();
 
-            //calculates the player's y coordinate as if they were on the map grid
-            //offsets the central point of the player on the y axis
-            yPlayerCentre = yPlayer + 0.9f;
-                yPlayerGrid = (int)yPlayerCentre;
-
+            //reads the current state of the keyboard
             KeyboardState State = Keyboard.GetState();
 
             if (State.IsKeyDown(Keys.W))
             {
                 //checks to make sure the player can move upwards
-                if (yPlayerCentre % 1 > 0.1 || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] == 2 || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] == 4)
+                if (Player1.yCentreGet() % 1 > 0.1 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 4)
                     //moves the player upwards in real time
-                    yPlayer += (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    Player1.yPosSet(Player1.yPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
 
             if (State.IsKeyDown(Keys.A))
             {
                 //checks to make sure the player can move left
-                if (xPlayerCentre % 1 > 0.1 || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] == 2 || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] == 4)
+                if (Player1.xCentreGet() % 1 > 0.1 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 4)
                     //moves the player left in real time
-                    xPlayer += (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    Player1.xPosSet(Player1.xPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
 
             if (State.IsKeyDown(Keys.S))
             {
                 //checks to make sure the player can move downwards
-                if (yPlayerCentre % 1 < 0.9 || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] == 2 || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] == 4)
+                if (Player1.yCentreGet() % 1 < 0.9 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 4)
                     //moves the player downwards in real time
-                    yPlayer += (5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    Player1.yPosSet(Player1.yPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
 
             if (State.IsKeyDown(Keys.D))
             {
                 //checks to make sure the player can move right
-                if (xPlayerCentre % 1 < 0.9 || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] == 2 || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] == 4)
+                if (Player1.xCentreGet() % 1 < 0.9 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 4)
                     //moves the player right in real time
-                    xPlayer += (5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    Player1.xPosSet(Player1.xPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
 
             //detects if player walks over the stairs and moves onto the next level
-            if (lvlMap[80 * yPlayerGrid + xPlayerGrid] == 4)
+            if (lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] == 4)
             {
-                lvlMap[80 * yPlayerGrid + xPlayerGrid] = 2;
+                lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] = 2;
                 lvlMapNumber += 1;
                 newFloor = true;
             }
@@ -347,7 +345,7 @@ namespace GamesProgrammingAssignment
                 }
             }
 
-            spriteBatch.Draw(lvlPlayer, new Rectangle((int)(xPlayer * 20), (int)(yPlayer * 20), 20, 20), Color.White);
+            spriteBatch.Draw(lvlPlayer, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
 
             spriteBatch.End();
 
@@ -403,8 +401,8 @@ namespace GamesProgrammingAssignment
 
                         case 1:
                             //checks if selected tile is on the corridor
-                            if ((yPlayerGrid > yStairs && y <= yCorridor + lengthCorridor && y >= yStairs && x == xCorridor)
-                                || (yPlayerGrid < yStairs && y >= yCorridor - lengthCorridor && y <= yStairs && x == xCorridor))
+                            if ((Player1.yGridGet() > yStairs && y <= yCorridor + lengthCorridor && y >= yStairs && x == xCorridor)
+                                || (Player1.yGridGet() < yStairs && y >= yCorridor - lengthCorridor && y <= yStairs && x == xCorridor))
                             {
                                 //checks to see if the stairs have been reached
                                 if (x == xStairs && y == yStairs)
@@ -424,8 +422,8 @@ namespace GamesProgrammingAssignment
 
                         default:
                             //draws the path from along the x axis
-                            if ((xPlayerGrid > xStairs && x <= xCorridor + lengthCorridor && x >= xStairs && y == yCorridor)
-                                || (xPlayerGrid < xStairs && x >= xCorridor - lengthCorridor && x <= xStairs && y == yCorridor))
+                            if ((Player1.xGridGet() > xStairs && x <= xCorridor + lengthCorridor && x >= xStairs && y == yCorridor)
+                                || (Player1.xGridGet() < xStairs && x >= xCorridor - lengthCorridor && x <= xStairs && y == yCorridor))
                             {
                                 //checks to see if the stairs have been reached
                                 if (x == xStairs && y == yStairs)
