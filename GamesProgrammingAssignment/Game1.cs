@@ -20,7 +20,6 @@ namespace GamesProgrammingAssignment
         SpriteBatch spriteBatch;
 
         private int lvlMapNumber;
-        private int lvlRoomNumber;
         private bool newFloor = true;
 
         private int count;
@@ -35,6 +34,8 @@ namespace GamesProgrammingAssignment
         private int yStairs;
         private float xPlayer;
         private float yPlayer;
+        private float xPlayerCentre;
+        private float yPlayerCentre;
         private int xPlayerGrid;
         private int yPlayerGrid;
 
@@ -70,7 +71,6 @@ namespace GamesProgrammingAssignment
         protected override void Initialize()
         {
             lvlMapNumber = 1;
-            lvlRoomNumber = 1;
 
             for (int x = 0; x < 80 * 48; x++)
             {
@@ -263,48 +263,48 @@ namespace GamesProgrammingAssignment
                 newFloor = false;
             }
 
-            if (xPlayer % 1 > 0.5)
-                xPlayerGrid = (int)xPlayer + 1;
-            else
-                xPlayerGrid = (int)xPlayer;
+            //calculates the player's x coordinate as if they were on the map grid
+            //offsets the central point of the player on the x axis
+            xPlayerCentre = xPlayer + 0.5f;
+                xPlayerGrid = (int)xPlayerCentre;
 
-            if (yPlayer % 1 > 0.5)
-                yPlayerGrid = (int)yPlayer + 1;
-            else
-                yPlayerGrid = (int)yPlayer;
+            //calculates the player's y coordinate as if they were on the map grid
+            //offsets the central point of the player on the y axis
+            yPlayerCentre = yPlayer + 0.9f;
+                yPlayerGrid = (int)yPlayerCentre;
 
             KeyboardState State = Keyboard.GetState();
 
             if (State.IsKeyDown(Keys.W))
             {
-                if (lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 1 && lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != 3 && lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] != -1) //checks to see if there is a wall or door in the direction the player is moving
-                    yPlayer += -0.2f;
-                else if (yPlayer - Math.Truncate(yPlayer) > 0.2) //if there is a wall adjacent to the player, checks that they are not too close
-                    yPlayer += -0.2f;
+                //checks to make sure the player can move upwards
+                if (yPlayerCentre % 1 > 0.1 || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] == 2 || lvlMap[80 * (yPlayerGrid - 1) + xPlayerGrid] == 4)
+                    //moves the player upwards in real time
+                    yPlayer += (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             if (State.IsKeyDown(Keys.A))
             {
-                if (lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] != 1)
-                    xPlayer += -0.2f;
-                else if (xPlayer - Math.Truncate(xPlayer) > 0.2)
-                    xPlayer += -0.2f;
+                //checks to make sure the player can move left
+                if (xPlayerCentre % 1 > 0.1 || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] == 2 || lvlMap[80 * yPlayerGrid + (xPlayerGrid - 1)] == 4)
+                    //moves the player left in real time
+                    xPlayer += (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             if (State.IsKeyDown(Keys.S))
             {
-                if (lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] != 1)
-                    yPlayer += 0.2f;
-                else if (yPlayer - Math.Truncate(yPlayer) < 0.8)
-                    yPlayer += 0.2f;
+                //checks to make sure the player can move downwards
+                if (yPlayerCentre % 1 < 0.9 || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] == 2 || lvlMap[80 * (yPlayerGrid + 1) + xPlayerGrid] == 4)
+                    //moves the player downwards in real time
+                    yPlayer += (5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             if (State.IsKeyDown(Keys.D))
             {
-                if (lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] != 1)
-                    xPlayer += 0.2f;
-                else if (xPlayer - Math.Truncate(xPlayer) < 0.8)
-                    xPlayer += 0.2f;
+                //checks to make sure the player can move right
+                if (xPlayerCentre % 1 < 0.9 || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] == 2 || lvlMap[80 * yPlayerGrid + (xPlayerGrid + 1)] == 4)
+                    //moves the player right in real time
+                    xPlayer += (5f * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             //detects if player walks over the stairs and moves onto the next level
