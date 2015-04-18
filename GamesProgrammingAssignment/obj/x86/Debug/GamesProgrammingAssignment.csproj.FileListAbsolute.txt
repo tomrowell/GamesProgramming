@@ -88,3 +88,4 @@ E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\SharpDX.
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\SharpDX.RawInput.xml
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\SharpDX.Direct3D9.xml
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\obj\x86\Debug\GamesProgrammingAssignment.csprojResolveAssemblyReference.cache
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Enemy.xnb
