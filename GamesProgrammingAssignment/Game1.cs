@@ -32,6 +32,11 @@ namespace GamesProgrammingAssignment
         private int yDoor;
         private int xStairs;
         private int yStairs;
+        private int xChest;
+        private int yChest;
+        private int typeChest;
+        private Random randChest;
+        private Random randCharges;
 
         int xEnemy;
         int yEnemy;
@@ -48,6 +53,10 @@ namespace GamesProgrammingAssignment
         private Texture2D lvlStairs;
         private Texture2D lvlPlayer;
         private Texture2D lvlEnemy;
+        private Texture2D lvlPlayerSword;
+        private Texture2D lvlPlayerShield;
+        private Texture2D lvlPlayerSwordShield;
+        private Texture2D lvlChest;
 
         //creates an array to store the map grid
         private int[] lvlMap = new int[80 * 48];
@@ -98,6 +107,10 @@ namespace GamesProgrammingAssignment
             lvlStairs = Content.Load<Texture2D>("Stairs");
             lvlPlayer = Content.Load<Texture2D>("Player");
             lvlEnemy = Content.Load<Texture2D>("Enemy");
+            lvlPlayerSword = Content.Load<Texture2D>("PlayerSword");
+            lvlPlayerShield = Content.Load<Texture2D>("PlayerShield");
+            lvlPlayerSwordShield = Content.Load<Texture2D>("PlayerSwordShield");
+            lvlChest = Content.Load<Texture2D>("Chest");
         }
 
         /// <summary>
@@ -133,34 +146,63 @@ namespace GamesProgrammingAssignment
             //updates the coordinates for the enemies and makes them chase the player 
             for (int c = 0; c < lvlMapNumber - 1; c++)
             {
-                Enemies[c].xyUpdate(Player1.xGridGet(), Player1.yGridGet());
-
-                if (Enemies[c].seenGet() && Enemies[c].attackedGet() == false)
+                if (Enemies[c].deadGet() == false)
                 {
-                    if (Enemies[c].xGridGet() > Player1.xGridGet())
+                    Enemies[c].xyUpdate(Player1.xGridGet(), Player1.yGridGet());
+
+                    if (Enemies[c].seenGet() && Enemies[c].attackedGet() == false)
                     {
-                        if (Enemies[c].xCentreGet() % 1 > 0.1 || lvlMap[80 * Enemies[c].yGridGet() + (Enemies[c].xGridGet() - 1)] == 2)
-                            Enemies[c].xPosSet(Enemies[c].xPosGet() + (-2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-                    }
-                    if (Enemies[c].xGridGet() < Player1.xGridGet())
-                    {
-                        if (Enemies[c].xCentreGet() % 1 < 0.9 || lvlMap[80 * Enemies[c].yGridGet() + (Enemies[c].xGridGet() + 1)] == 2)
-                            Enemies[c].xPosSet(Enemies[c].xPosGet() + (2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-                    }
-                    if (Enemies[c].yGridGet() > Player1.yGridGet())
-                    {
-                        if (Enemies[c].yCentreGet() % 1 > 0.1 || lvlMap[80 * (Enemies[c].yGridGet() - 1) + Enemies[c].xGridGet()] == 2)
-                        Enemies[c].yPosSet(Enemies[c].yPosGet() + (-2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-                    }
-                    if (Enemies[c].yGridGet() < Player1.yGridGet())
-                    {
-                        if (Enemies[c].yCentreGet() % 1 < 0.9 || lvlMap[80 * (Enemies[c].yGridGet() + 1) + Enemies[c].xGridGet()] == 2)
-                        Enemies[c].yPosSet(Enemies[c].yPosGet() + (2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-                    }
-                    if (Enemies[c].xGridGet() == Player1.xGridGet() && Enemies[c].yGridGet() == Player1.yGridGet())
-                    {
-                        Player1.healthSet(Player1.healthGet() - 1);
-                        Enemies[c].playerAttacked();
+                        if (Enemies[c].xGridGet() > Player1.xGridGet())
+                        {
+                            if (Enemies[c].xCentreGet() % 1 > 0.1 || lvlMap[80 * Enemies[c].yGridGet() + (Enemies[c].xGridGet() - 1)] == 2)
+                                Enemies[c].xPosSet(Enemies[c].xPosGet() + (-2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                        }
+                        if (Enemies[c].xGridGet() < Player1.xGridGet())
+                        {
+                            if (Enemies[c].xCentreGet() % 1 < 0.9 || lvlMap[80 * Enemies[c].yGridGet() + (Enemies[c].xGridGet() + 1)] == 2)
+                                Enemies[c].xPosSet(Enemies[c].xPosGet() + (2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                        }
+                        if (Enemies[c].yGridGet() > Player1.yGridGet())
+                        {
+                            if (Enemies[c].yCentreGet() % 1 > 0.1 || lvlMap[80 * (Enemies[c].yGridGet() - 1) + Enemies[c].xGridGet()] == 2)
+                            Enemies[c].yPosSet(Enemies[c].yPosGet() + (-2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                        }
+                        if (Enemies[c].yGridGet() < Player1.yGridGet())
+                        {
+                            if (Enemies[c].yCentreGet() % 1 < 0.9 || lvlMap[80 * (Enemies[c].yGridGet() + 1) + Enemies[c].xGridGet()] == 2)
+                            Enemies[c].yPosSet(Enemies[c].yPosGet() + (2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                        }
+
+                        //checks to see if there was a collision between the player and the enemy
+                        if (Enemies[c].xGridGet() == Player1.xGridGet() && Enemies[c].yGridGet() == Player1.yGridGet())
+                        {
+                            //checks to see if the player had a shield to block the damage
+                            if (Player1.shieldGet())
+                            {
+                                Player1.shieldChargesSet(-1);
+                                if (Player1.shieldChargesGet() == 0)
+                                    Player1.shieldSet(false);
+                            }
+                            else
+                            {
+                                Player1.healthSet(Player1.healthGet() - 1);
+                            }
+
+                            //checks to see if the player had a sword to kill the enemy with
+                            if (Player1.swordGet())
+                            {
+                                Enemies[c].healthSet(1);
+                                Player1.swordChargesSet(-1);
+                                if (Player1.swordChargesGet() == 0)
+                                    Player1.swordSet(false);
+
+                                if (Enemies[c].healthGet() == 0)
+                                    Enemies[c].dead();
+                            }
+
+                            //triggers a timer to stop the enemy acting for 1 second after attacking the player
+                            Enemies[c].playerAttacked();
+                        }
                     }
                 }
             }
@@ -171,7 +213,7 @@ namespace GamesProgrammingAssignment
             if (State.IsKeyDown(Keys.W))
             {
                 //checks to make sure the player can move upwards
-                if (Player1.yCentreGet() % 1 > 0.1 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 4)
+                if (Player1.yCentreGet() % 1 > 0.1 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 4 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 5)
                     //moves the player upwards in real time
                     Player1.yPosSet(Player1.yPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
@@ -179,7 +221,7 @@ namespace GamesProgrammingAssignment
             if (State.IsKeyDown(Keys.A))
             {
                 //checks to make sure the player can move left
-                if (Player1.xCentreGet() % 1 > 0.1 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 4)
+                if (Player1.xCentreGet() % 1 > 0.1 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 4 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 5)
                     //moves the player left in real time
                     Player1.xPosSet(Player1.xPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
@@ -187,7 +229,7 @@ namespace GamesProgrammingAssignment
             if (State.IsKeyDown(Keys.S))
             {
                 //checks to make sure the player can move downwards
-                if (Player1.yCentreGet() % 1 < 0.9 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 4)
+                if (Player1.yCentreGet() % 1 < 0.9 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 4 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 5)
                     //moves the player downwards in real time
                     Player1.yPosSet(Player1.yPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
@@ -195,12 +237,38 @@ namespace GamesProgrammingAssignment
             if (State.IsKeyDown(Keys.D))
             {
                 //checks to make sure the player can move right
-                if (Player1.xCentreGet() % 1 < 0.9 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 4)
+                if (Player1.xCentreGet() % 1 < 0.9 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 4 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 5)
                     //moves the player right in real time
                     Player1.xPosSet(Player1.xPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
 
-            //detects if player walks over the stairs and moves onto the next level
+            //detects if the player walks over the chest
+            if (lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] == 5)
+            {
+                randChest = new Random();
+                randCharges = new Random();
+                typeChest = randChest.Next(1, 10);
+                //randomly selects whether to give the player a sword or a shield
+                if (typeChest % 2 == 1)
+                {
+                    if (Player1.swordGet() == false)
+                        Player1.swordSet(true);
+                    Player1.swordChargesSet(randCharges.Next(1, 5));
+                }
+                else
+                {
+                    if (Player1.shieldGet() == false)
+                        Player1.shieldSet(true);
+                    Player1.shieldChargesSet(randCharges.Next(1, 5));
+                }
+
+                //removes the chest
+                xChest = -1;
+                yChest = -1;
+                lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] = 2;
+            }
+
+            //detects if the player walks over the stairs and moves onto the next level
             if (lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] == 4)
             {
                 lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] = 2;
@@ -237,6 +305,9 @@ namespace GamesProgrammingAssignment
 
                     if (lvlMap[80 * y + x] == 4)
                         spriteBatch.Draw(lvlStairs, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
+
+                    if (lvlMap[80 * y + x] == 5)
+                        spriteBatch.Draw(lvlChest, new Rectangle(x * 20, y * 20, 20, 20), Color.White);
                 }
             }
 
@@ -248,7 +319,14 @@ namespace GamesProgrammingAssignment
                 }
             }
 
-            spriteBatch.Draw(lvlPlayer, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
+            if (Player1.swordGet() && Player1.shieldGet())
+                spriteBatch.Draw(lvlPlayerSwordShield, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
+            else if (Player1.swordGet())
+                spriteBatch.Draw(lvlPlayerSword, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
+            else if (Player1.shieldGet())
+                spriteBatch.Draw(lvlPlayerShield, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
+            else
+                spriteBatch.Draw(lvlPlayer, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
 
             spriteBatch.End();
 
@@ -269,6 +347,8 @@ namespace GamesProgrammingAssignment
                     yDoor = 6;
                     xStairs = 40;
                     yStairs = 24;
+                    xChest = -1;
+                    yChest = -1;
 
                     //assigns the values given above to the map grid
                     lvlMapRoomAssign();
@@ -294,6 +374,8 @@ namespace GamesProgrammingAssignment
                     Random rand10 = new Random(rand9.Next(0, 100));
                     Random rand11 = new Random(rand10.Next(0, 100));
                     Random rand12 = new Random(rand11.Next(0, 100));
+                    Random rand13 = new Random(rand12.Next(0, 100));
+                    Random rand14 = new Random(rand13.Next(0, 100));
 
                     //generates the same amount of rooms as the level number
                     do
@@ -338,6 +420,14 @@ namespace GamesProgrammingAssignment
                     Player1.xPosSet(Player1.xGridGet());
                     Player1.yPosSet(Player1.yGridGet());
 
+                    do
+                    {
+                        xChest = rand13.Next(0, 80);
+                        yChest = rand14.Next(0, 48);
+                    }
+                    while (lvlMap[80 * yChest + xChest] != 2);
+                    lvlMapRoomAssign();
+
                     //creates a path from the player to the stairs
                     completedCorridor = false;
                     //reads in the player's position as the current point
@@ -353,13 +443,11 @@ namespace GamesProgrammingAssignment
                             //then moves the current point to the end of the corridor
                             if (xCorridor > xStairs)
                             {
-                                //lengthCorridor = rand10.Next(1, xCorridor - xStairs);
                                 lengthCorridor = xCorridor - xStairs;
                                 xCorridor -= lengthCorridor;
                             }
                             else if (xCorridor < xStairs)
                             {
-                                //lengthCorridor = rand10.Next(1, xStairs - xCorridor);
                                 lengthCorridor = xStairs - xCorridor;
                                 xCorridor += lengthCorridor;
                             }
@@ -418,13 +506,15 @@ namespace GamesProgrammingAssignment
                         || xEnemy == xStairs && yEnemy == yStairs);
 
                         //creates an instance of the Enemy class for each enemy
-                        Enemies[c] = new Enemy(xEnemy, yEnemy, lvlMapNumber + 1);
+                        Enemies[c] = new Enemy(xEnemy, yEnemy, 1);
                     }
                     break;
             }
-            //clears the previous set of stairs
+            //clears the previous set of stairs and chest
             xStairs = -1;
             yStairs = -1;
+            xChest = -1;
+            yChest = -1;
         }
 
         private void lvlMapRoomAssign()
@@ -458,6 +548,12 @@ namespace GamesProgrammingAssignment
                     if (x == xStairs && y == yStairs)
                     {
                         lvlMap[80 * y + x] = 4;
+                    }
+
+                    //assigning values for chest
+                    if (x == xChest && y == yChest)
+                    {
+                        lvlMap[80 * y + x] = 5;
                     }
                 }
             }

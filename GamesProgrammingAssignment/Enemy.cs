@@ -19,6 +19,7 @@ namespace GamesProgrammingAssignment
 
         private bool Seen = false;
         private bool Attacked = false;
+        private bool Dead = false;
         private Timer attackTimer;
 
         public Enemy(int x, int y, int hp)
@@ -120,6 +121,33 @@ namespace GamesProgrammingAssignment
         {
             Attacked = false;
             attackTimer.Enabled = false;
+        }
+
+        public int healthGet()
+        {
+            return Health;
+        }
+        public void healthSet(int damage)
+        {
+            Health -= damage;
+        }
+
+        public bool deadGet()
+        {
+            return Dead;
+        }
+        public void dead()
+        {
+            Dead = true;
+            
+            xPos = -1;
+            yPos = -1;
+            xGrid = -1;
+            yGrid = -1;
+            xCentre = -1f;
+            yCentre = -1f;
+            Seen = false;
+            Attacked = false;
         }
     }
 }

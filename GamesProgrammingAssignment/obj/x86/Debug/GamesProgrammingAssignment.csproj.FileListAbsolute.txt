@@ -89,3 +89,7 @@ E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\SharpDX.
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\SharpDX.Direct3D9.xml
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\obj\x86\Debug\GamesProgrammingAssignment.csprojResolveAssemblyReference.cache
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Enemy.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Chest.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerShield.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSword.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSwordShield.xnb

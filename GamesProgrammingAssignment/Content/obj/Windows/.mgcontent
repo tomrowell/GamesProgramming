@@ -10,5 +10,9 @@
     <File>E:/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Stairs.png</File>
     <File>E:/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Player.png</File>
     <File>E:/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Enemy.png</File>
+    <File>E:/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/Chest.png</File>
+    <File>E:/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/PlayerShield.png</File>
+    <File>E:/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/PlayerSword.png</File>
+    <File>E:/GitHub/GamesProgramming/GamesProgrammingAssignment/Content/PlayerSwordShield.png</File>
   </SourceFiles>
 </SourceFileCollection>

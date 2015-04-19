@@ -99,5 +99,39 @@ namespace GamesProgrammingAssignment
         {
             Health = HP;
         }
+
+        public bool swordGet()
+        {
+            return Sword;
+        }
+        public bool shieldGet()
+        {
+            return Shield;
+        }
+        public void swordSet(bool swordState)
+        {
+            Sword = swordState;
+        }
+        public void shieldSet(bool shieldState)
+        {
+            Shield = shieldState;
+        }
+
+        public int swordChargesGet()
+        {
+            return SwordCharges;
+        }
+        public int shieldChargesGet()
+        {
+            return ShieldCharges;
+        }
+        public void swordChargesSet(int charges)
+        {
+            SwordCharges += charges;
+        }
+        public void shieldChargesSet(int charges)
+        {
+            ShieldCharges += charges;
+        }
     }
 }
