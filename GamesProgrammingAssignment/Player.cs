@@ -20,6 +20,7 @@ namespace GamesProgrammingAssignment
         private int ShieldCharges;
 
         private int Health;
+        private bool Dead;
 
         public Player(int x, int y, int hp)
         {
@@ -33,6 +34,7 @@ namespace GamesProgrammingAssignment
             yCentre = y + 0.9f;
 
             Health = hp;
+            Dead = false;
         }
 
         //allows other classes to retrieve and change the private variables xPos and yPos
@@ -98,6 +100,15 @@ namespace GamesProgrammingAssignment
         public void healthSet(int HP)
         {
             Health = HP;
+        }
+
+        public bool deadGet()
+        {
+            return Dead;
+        }
+        public void dead()
+        {
+            Dead = true;
         }
 
         public bool swordGet()

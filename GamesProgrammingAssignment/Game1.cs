@@ -60,11 +60,13 @@ namespace GamesProgrammingAssignment
         private Texture2D lvlPlayerSwordShield;
         private Texture2D lvlChest;
 
+        private Texture2D uiDeath;
+
         //creates an array to store the map grid
         private int[] lvlMap = new int[80 * 48];
 
         //creates an instance of the Player class
-        Player Player1 = new Player(40, 8, 20);
+        Player Player1 = new Player(40, 8, 10);
         Enemy[] Enemies;
 
         public Game1()
@@ -114,6 +116,8 @@ namespace GamesProgrammingAssignment
             lvlPlayerShield = Content.Load<Texture2D>("PlayerShield");
             lvlPlayerSwordShield = Content.Load<Texture2D>("PlayerSwordShield");
             lvlChest = Content.Load<Texture2D>("Chest");
+
+            uiDeath = Content.Load<Texture2D>("DeathScreen");
         }
 
         /// <summary>
@@ -189,6 +193,8 @@ namespace GamesProgrammingAssignment
                             else
                             {
                                 Player1.healthSet(Player1.healthGet() - 1);
+                                if (Player1.healthGet() == 0)
+                                    Player1.dead();
                             }
 
                             //checks to see if the player had a sword to kill the enemy with
@@ -213,40 +219,60 @@ namespace GamesProgrammingAssignment
             //reads the current state of the keyboard
             KeyboardState State = Keyboard.GetState();
 
-            if (State.IsKeyDown(Keys.W))
+            //checks to see if the player is dead
+            //if the player is dead, they can press enter to exit or backspace to restart
+            if (Player1.deadGet())
             {
-                //checks to make sure the player can move upwards
-                if (Player1.yCentreGet() % 1 > 0.1 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 4 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 5)
-                    //moves the player upwards in real time
-                    Player1.yPosSet(Player1.yPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-            }
+                if (State.IsKeyDown(Keys.Back))
+                {
+                    Exit();
+                    Game1 game = new Game1();
+                    game.Run();
+                }
 
-            if (State.IsKeyDown(Keys.A))
+                if (State.IsKeyDown(Keys.Enter))
+                {
+                    Exit();
+                }
+            }
+            //if the player is not dead, allows them to move with W A S D
+            else
             {
-                //checks to make sure the player can move left
-                if (Player1.xCentreGet() % 1 > 0.1 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 4 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 5)
-                    //moves the player left in real time
-                    Player1.xPosSet(Player1.xPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-            }
+                if (State.IsKeyDown(Keys.W))
+                {
+                    //checks to make sure the player can move upwards
+                    if (Player1.yCentreGet() % 1 > 0.1 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 4 || lvlMap[80 * (Player1.yGridGet() - 1) + Player1.xGridGet()] == 5)
+                        //moves the player upwards in real time
+                        Player1.yPosSet(Player1.yPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                }
 
-            if (State.IsKeyDown(Keys.S))
-            {
-                //checks to make sure the player can move downwards
-                if (Player1.yCentreGet() % 1 < 0.9 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 4 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 5)
-                    //moves the player downwards in real time
-                    Player1.yPosSet(Player1.yPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-            }
+                if (State.IsKeyDown(Keys.A))
+                {
+                    //checks to make sure the player can move left
+                    if (Player1.xCentreGet() % 1 > 0.1 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 4 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() - 1)] == 5)
+                        //moves the player left in real time
+                        Player1.xPosSet(Player1.xPosGet() + (-5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                }
 
-            if (State.IsKeyDown(Keys.D))
-            {
-                //checks to make sure the player can move right
-                if (Player1.xCentreGet() % 1 < 0.9 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 4 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 5)
-                    //moves the player right in real time
-                    Player1.xPosSet(Player1.xPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
-            }
+                if (State.IsKeyDown(Keys.S))
+                {
+                    //checks to make sure the player can move downwards
+                    if (Player1.yCentreGet() % 1 < 0.9 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 2 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 4 || lvlMap[80 * (Player1.yGridGet() + 1) + Player1.xGridGet()] == 5)
+                        //moves the player downwards in real time
+                        Player1.yPosSet(Player1.yPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                }
 
-            //inputs the player's new position into the camera position
-            PlayerCamera.cameraMove(Player1.xPosGet(), Player1.yPosGet());
+                if (State.IsKeyDown(Keys.D))
+                {
+                    //checks to make sure the player can move right
+                    if (Player1.xCentreGet() % 1 < 0.9 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 2 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 4 || lvlMap[80 * Player1.yGridGet() + (Player1.xGridGet() + 1)] == 5)
+                        //moves the player right in real time
+                        Player1.xPosSet(Player1.xPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                }
+
+                //inputs the player's new position into the camera position
+                PlayerCamera.cameraMove(Player1.xPosGet(), Player1.yPosGet());
+            }
 
             //detects if the player walks over the chest
             if (lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] == 5)
@@ -257,12 +283,14 @@ namespace GamesProgrammingAssignment
                 //randomly selects whether to give the player a sword or a shield
                 if (typeChest % 2 == 1)
                 {
+                    //checks if the player already has a sword, and either gives them one with charges, or adds to their current charges
                     if (Player1.swordGet() == false)
                         Player1.swordSet(true);
                     Player1.swordChargesSet(randCharges.Next(1, 5));
                 }
                 else
                 {
+                    //checks if the player already has a shield, and either gives them one with charges, or adds to their current charges
                     if (Player1.shieldGet() == false)
                         Player1.shieldSet(true);
                     Player1.shieldChargesSet(randCharges.Next(1, 5));
@@ -333,6 +361,9 @@ namespace GamesProgrammingAssignment
                 spriteBatch.Draw(lvlPlayerShield, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
             else
                 spriteBatch.Draw(lvlPlayer, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
+
+            if (Player1.deadGet())
+                spriteBatch.Draw(uiDeath, new Rectangle((int)(Player1.xPosGet() * 20) - 200, (int)(Player1.yPosGet() * 20) - 112, 400, 225), Color.White);
 
             spriteBatch.End();
 

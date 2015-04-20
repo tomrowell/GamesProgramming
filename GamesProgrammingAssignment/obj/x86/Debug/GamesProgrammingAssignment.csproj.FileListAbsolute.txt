@@ -98,3 +98,4 @@ C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\
 C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerShield.xnb
 C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSword.xnb
 C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSwordShield.xnb
+C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\DeathScreen.xnb
