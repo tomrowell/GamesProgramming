@@ -61,6 +61,11 @@ namespace GamesProgrammingAssignment
         private Texture2D lvlChest;
 
         private Texture2D uiDeath;
+        private Texture2D uiHeart;
+        private Texture2D uiSword;
+        private Texture2D uiShield;
+        private Texture2D uiSteps;
+        private SpriteFont uiText;
 
         //creates an array to store the map grid
         private int[] lvlMap = new int[80 * 48];
@@ -118,6 +123,12 @@ namespace GamesProgrammingAssignment
             lvlChest = Content.Load<Texture2D>("Chest");
 
             uiDeath = Content.Load<Texture2D>("DeathScreen");
+            uiHeart = Content.Load<Texture2D>("Heart");
+            uiSword = Content.Load<Texture2D>("Sword");
+            uiShield = Content.Load<Texture2D>("Shield");
+            uiSteps = Content.Load<Texture2D>("Steps");
+
+            uiText = Content.Load<SpriteFont>("Text");
         }
 
         /// <summary>
@@ -162,22 +173,22 @@ namespace GamesProgrammingAssignment
                         if (Enemies[c].xGridGet() > Player1.xGridGet())
                         {
                             if (Enemies[c].xCentreGet() % 1 > 0.1 || lvlMap[80 * Enemies[c].yGridGet() + (Enemies[c].xGridGet() - 1)] == 2)
-                                Enemies[c].xPosSet(Enemies[c].xPosGet() + (-2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                                Enemies[c].xPosSet(Enemies[c].xPosGet() + (-3f * (float)gameTime.ElapsedGameTime.TotalSeconds));
                         }
                         if (Enemies[c].xGridGet() < Player1.xGridGet())
                         {
                             if (Enemies[c].xCentreGet() % 1 < 0.9 || lvlMap[80 * Enemies[c].yGridGet() + (Enemies[c].xGridGet() + 1)] == 2)
-                                Enemies[c].xPosSet(Enemies[c].xPosGet() + (2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                                Enemies[c].xPosSet(Enemies[c].xPosGet() + (3f * (float)gameTime.ElapsedGameTime.TotalSeconds));
                         }
                         if (Enemies[c].yGridGet() > Player1.yGridGet())
                         {
                             if (Enemies[c].yCentreGet() % 1 > 0.1 || lvlMap[80 * (Enemies[c].yGridGet() - 1) + Enemies[c].xGridGet()] == 2)
-                            Enemies[c].yPosSet(Enemies[c].yPosGet() + (-2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                            Enemies[c].yPosSet(Enemies[c].yPosGet() + (-3f * (float)gameTime.ElapsedGameTime.TotalSeconds));
                         }
                         if (Enemies[c].yGridGet() < Player1.yGridGet())
                         {
                             if (Enemies[c].yCentreGet() % 1 < 0.9 || lvlMap[80 * (Enemies[c].yGridGet() + 1) + Enemies[c].xGridGet()] == 2)
-                            Enemies[c].yPosSet(Enemies[c].yPosGet() + (2f * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                            Enemies[c].yPosSet(Enemies[c].yPosGet() + (3f * (float)gameTime.ElapsedGameTime.TotalSeconds));
                         }
 
                         //checks to see if there was a collision between the player and the enemy
@@ -286,14 +297,14 @@ namespace GamesProgrammingAssignment
                     //checks if the player already has a sword, and either gives them one with charges, or adds to their current charges
                     if (Player1.swordGet() == false)
                         Player1.swordSet(true);
-                    Player1.swordChargesSet(randCharges.Next(1, 5));
+                    Player1.swordChargesSet(randCharges.Next(1, 3));
                 }
                 else
                 {
                     //checks if the player already has a shield, and either gives them one with charges, or adds to their current charges
                     if (Player1.shieldGet() == false)
                         Player1.shieldSet(true);
-                    Player1.shieldChargesSet(randCharges.Next(1, 5));
+                    Player1.shieldChargesSet(randCharges.Next(1, 3));
                 }
 
                 //removes the chest
@@ -361,6 +372,16 @@ namespace GamesProgrammingAssignment
                 spriteBatch.Draw(lvlPlayerShield, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
             else
                 spriteBatch.Draw(lvlPlayer, new Rectangle((int)(Player1.xPosGet() * 20), (int)(Player1.yPosGet() * 20), 20, 20), Color.White);
+
+            spriteBatch.Draw(uiHeart, new Rectangle((int)(Player1.xPosGet() * 20) - 400, (int)(Player1.yPosGet() * 20) - 225, 40, 40), Color.White);
+            spriteBatch.Draw(uiSword, new Rectangle((int)(Player1.xPosGet() * 20) - 400, (int)(Player1.yPosGet() * 20) - 175, 40, 40), Color.White);
+            spriteBatch.Draw(uiShield, new Rectangle((int)(Player1.xPosGet() * 20) - 400, (int)(Player1.yPosGet() * 20) - 125, 40, 40), Color.White);
+            spriteBatch.Draw(uiSteps, new Rectangle((int)(Player1.xPosGet() * 20) - 400, (int)(Player1.yPosGet() * 20) - 75, 40, 40), Color.White);
+
+            spriteBatch.DrawString(uiText, (Player1.healthGet()).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 210), Color.White);
+            spriteBatch.DrawString(uiText, (Player1.swordChargesGet()).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 160), Color.White);
+            spriteBatch.DrawString(uiText, (Player1.shieldChargesGet()).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 110), Color.White);
+            spriteBatch.DrawString(uiText, (lvlMapNumber).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 60), Color.White);
 
             if (Player1.deadGet())
                 spriteBatch.Draw(uiDeath, new Rectangle((int)(Player1.xPosGet() * 20) - 200, (int)(Player1.yPosGet() * 20) - 112, 400, 225), Color.White);
