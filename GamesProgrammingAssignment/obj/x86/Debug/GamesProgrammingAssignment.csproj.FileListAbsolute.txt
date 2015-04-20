@@ -93,3 +93,8 @@ E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerShield.xnb
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSword.xnb
 E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSwordShield.xnb
+C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Enemy.xnb
+C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Chest.xnb
+C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerShield.xnb
+C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSword.xnb
+C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\PlayerSwordShield.xnb

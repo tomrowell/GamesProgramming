@@ -19,6 +19,8 @@ namespace GamesProgrammingAssignment
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Camera PlayerCamera = new Camera(0, 0);
+
         private int lvlMapNumber;
         private bool newFloor = true;
 
@@ -69,6 +71,7 @@ namespace GamesProgrammingAssignment
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.SynchronizeWithVerticalRetrace = true;
             graphics.PreferredBackBufferWidth = 1600;
             graphics.PreferredBackBufferHeight = 960;
             Content.RootDirectory = "Content";
@@ -242,6 +245,9 @@ namespace GamesProgrammingAssignment
                     Player1.xPosSet(Player1.xPosGet() + (5f * (float)gameTime.ElapsedGameTime.TotalSeconds));
             }
 
+            //inputs the player's new position into the camera position
+            PlayerCamera.cameraMove(Player1.xPosGet(), Player1.yPosGet());
+
             //detects if the player walks over the chest
             if (lvlMap[80 * Player1.yGridGet() + Player1.xGridGet()] == 5)
             {
@@ -288,7 +294,7 @@ namespace GamesProgrammingAssignment
         {
             GraphicsDevice.Clear(Color.DarkGreen);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend, null, null, null, null, PlayerCamera.cameraTransform(graphics));
 
             for (int x = 0; x < 80; x++)
             {
