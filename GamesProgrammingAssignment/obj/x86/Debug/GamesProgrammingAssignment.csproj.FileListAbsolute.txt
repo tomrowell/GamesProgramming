@@ -104,3 +104,9 @@ C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\
 C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Sword.xnb
 C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Steps.xnb
 C:\Users\computing\Documents\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Text.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\DeathScreen.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Heart.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Shield.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Sword.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Steps.xnb
+E:\GitHub\GamesProgramming\GamesProgrammingAssignment\bin\Windows\Debug\Content\Text.xnb

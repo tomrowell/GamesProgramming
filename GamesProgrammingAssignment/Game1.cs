@@ -381,7 +381,7 @@ namespace GamesProgrammingAssignment
             spriteBatch.DrawString(uiText, (Player1.healthGet()).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 210), Color.White);
             spriteBatch.DrawString(uiText, (Player1.swordChargesGet()).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 160), Color.White);
             spriteBatch.DrawString(uiText, (Player1.shieldChargesGet()).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 110), Color.White);
-            spriteBatch.DrawString(uiText, (lvlMapNumber).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 60), Color.White);
+            spriteBatch.DrawString(uiText, (lvlMapNumber - 1).ToString(), new Vector2((Player1.xPosGet() * 20) - 360, (Player1.yPosGet() * 20) - 60), Color.White);
 
             if (Player1.deadGet())
                 spriteBatch.Draw(uiDeath, new Rectangle((int)(Player1.xPosGet() * 20) - 200, (int)(Player1.yPosGet() * 20) - 112, 400, 225), Color.White);
@@ -497,7 +497,7 @@ namespace GamesProgrammingAssignment
                     {
                         if (xySelect == 1)
                         {
-                            //randomly chooses a distance between 1 and the total distance between the current point and the stairs in the x axis
+                            //finds the distance between the current point and the stairs in the x axis
                             //then moves the current point to the end of the corridor
                             if (xCorridor > xStairs)
                             {
@@ -517,17 +517,15 @@ namespace GamesProgrammingAssignment
                         }
                         else
                         {
-                            //randomly chooses a distance between 1 and the total distance between the current point and the stairs in the y axis
+                            //finds the distance between the current point and the stairs in the y axis
                             //then moves the current point to the end of the corridor
                             if (yCorridor > yStairs)
                             {
-                                //lengthCorridor = rand10.Next(1, yCorridor - yStairs);
                                 lengthCorridor = yCorridor - yStairs;
                                 yCorridor -= lengthCorridor;
                             }
                             else if (yCorridor < yStairs)
                             {
-                                //lengthCorridor = rand10.Next(1, yStairs - yCorridor);
                                 lengthCorridor = yStairs - yCorridor;
                                 yCorridor += lengthCorridor;
                             }
